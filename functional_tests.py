@@ -17,8 +17,8 @@ class NewVisitorTest(unittest.TestCase):
         header_text = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('To-Do', header_text)
 
-        inputbox = self.browser.find_element_by_id('ide_new_item')
-        self.assertEqual(inputbox.get_attribute('placeholder', 'Enter a to-do item'))
+        inputbox = self.browser.find_element_by_id('id-new-item')
+        self.assertEqual(inputbox.get_attribute('placeholder'), 'Enter a to-do item')
 
         inputbox.send_keys('Budy peacok feathers')
         inputbox.send_keys(Keys.ENTER)
