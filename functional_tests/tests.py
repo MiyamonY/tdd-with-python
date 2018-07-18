@@ -65,12 +65,12 @@ class NewVisitorTest(LiveServerTestCase):
         edith_list_url = self.browser.current_url
         self.assertRegex(edith_list_url, '/lists/.+')
 
-        self.broser.quit()
+        self.browser.quit()
 
-        self.browser.webdriver.chrome()
+        self.browser = webdriver.Chrome()
 
-        self.broser.get(self.live_server_url)
-        page_text = self.broser.find_element_by_tag_name('body').text
+        self.browser.get(self.live_server_url)
+        page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('Buy peacock feathers', page_text)
         self.assertNotIn('make a fly', page_text)
 
