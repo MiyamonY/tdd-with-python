@@ -1,18 +1,22 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
-from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.keys import Keys
 
 import time
+import os
 
 MAX_WAIT = 10
 
 
-class NewVisitorTest(LiveServerTestCase):
+class NewVisitorTest(StaticLiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Chrome()
+        staging_server = os.environ.get('STAGING_SERVER')
+        if staging_server:
+            self.live_server_url = 'http://' + staging_server
 
     def tearDown(self):
         self.browser.quit()
@@ -26,7 +30,6 @@ class NewVisitorTest(LiveServerTestCase):
                 self.assertIn(row_text, [row.text for row in rows])
                 return
             except (AssertionError, WebDriverException) as e:
-                print(time.time() - start_time, [row.text for row in rows])
                 if time.time() - start_time > MAX_WAIT:
                     raise e
                 time.sleep(0.5)
@@ -94,11 +97,11 @@ class NewVisitorTest(LiveServerTestCase):
 
         inputbox = self.browser.find_element_by_id('id-new-item')
         self.assertAlmostEqual(
-            inputbox.location['x'] + inputbox.size['width'] / 2, 512, delta=30)
+            inputbox.location['x'] + inputbox.size['width'] / 2, 512, delta=40)
 
         inputbox.send_keys('testing')
         inputbox.send_keys(Keys.ENTER)
         self.wait_for_row_in_list_table('1: testing')
         inputbox = self.browser.find_element_by_id('id-new-item')
         self.assertAlmostEqual(
-            inputbox.location['x'] + inputbox.size['width'] / 2, 512, delta=30)
+            inputbox.location['x'] + inputbox.size['width'] / 2, 512, delta=40)
